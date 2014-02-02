@@ -3,20 +3,72 @@
 (def data
   [{"Sally" 3
     "Bob" 2
-    "Maurice" 1}
+    "Maurice" 1
+    "Susan" 4}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 1
+    "Susan" 4}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 1
+    "Susan" 4}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 1
+    "Susan" 4}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 1
+    "Susan" 4}
+
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 4
+    "Susan" 1}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 4
+    "Susan" 1}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 4
+    "Susan" 1}
+   {"Sally" 3
+    "Bob" 2
+    "Maurice" 4
+    "Susan" 1}
+
+   {"Sally" 2
+    "Bob" 1
+    "Maurice" 4
+    "Susan" 3}
+   {"Sally" 2
+    "Bob" 1
+    "Maurice" 4
+    "Susan" 3}
+   {"Sally" 2
+    "Bob" 1
+    "Maurice" 4
+    "Susan" 3}
    {"Sally" 1
     "Bob" 2
-    "Maurice" 3}
+    "Maurice" 4
+    "Susan" 3}
    {"Sally" 1
     "Bob" 2
-    "Maurice" 3}
-   {"Sally" 1
-    "Bob" 2
-    "Maurice" 3}])
+    "Maurice" 4
+    "Susan" 3}])
 
 
 ; initial ballots consist of a sequence
 ; of vectors of maps of names (strings) to preference numbers (integers).
+
+
+(defn get-ballot-vectors [ballots]
+  (map (fn [ballot]
+         (map key (sort-by val ballot)))
+       ballots))
 
 (defn vote [ballots]
   (let [total-to-beat (/ (count ballots) 2)
