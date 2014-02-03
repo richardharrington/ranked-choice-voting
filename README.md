@@ -1,4 +1,4 @@
-# ranked_choice
+# ranked-choice-voting
 
 An implementation of a ranked-choice (or instant-runoff) voting algorithm.
 
