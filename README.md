@@ -1,6 +1,6 @@
 # ranked-choice-voting
 
-An implementation of a ranked-choice (or instant-runoff) voting algorithm.
+An implementation of a [ranked-choice (or instant-runoff)](http://en.wikipedia.org/wiki/Instant-runoff_voting) voting algorithm.
 
 ## Installation
 
@@ -12,7 +12,7 @@ An implementation of a ranked-choice (or instant-runoff) voting algorithm.
 
 1. `lein repl`
 2. `(demo)`
-3. (optional, see the data in test_data.clj) `(vote <name-of-data-set> <verbosity?>)`
+3. (optional, see the data in test_data.clj) `(vote <name-of-data-set> <verbose?>)`
 
 When you run `(demo)`, you should get a printout of the algorithm running on the following sample data (numbers are rankings on each ballot):
 
@@ -42,7 +42,7 @@ But in the end, Bob wins.
 
 This sample data is structured to demonstrate the advantages of a ranked-choice voting system. In a typical first-past-the-post election (like a U.S. presidential election), Maurice would win with only 27% of the vote. In a normal runoff-voting system, Maurice and Susan would have an expensive runoff, and one of them would win.
 
-But in ranked-choice voting, the election goes to Bob. He is the only person who is everyone's first or second choice. I don't feel like getting into the math, but he is clearly preferred most strongly by the most number of people.
+But in ranked-choice voting, the election goes to Bob. He is the only person who is everyone's first or second choice. Even without getting into the math, he is clearly preferred most strongly by the most number of people.
 
 ## License
 
