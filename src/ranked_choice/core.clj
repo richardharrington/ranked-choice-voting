@@ -1,31 +1,6 @@
 (ns ranked-choice.core
-  (:use [clojure.pprint :only [pprint]]))
-
-(def majority-win-data
-  [{"Bob" 1, "Sally" 2, "Maurice" 3}
-   {"Bob" 1, "Sally" 3, "Maurice" 2}
-   {"Bob" 2, "Sally" 1, "Maurice" 3}])
-
-(def tie-data
-  [{"Bob" 1}
-   {"Sally" 1}])
-
-(def data
-  [{"Sally" 3, "Bob" 2, "Maurice" 1, "Susan" 4}
-   {"Sally" 3, "Bob" 2, "Maurice" 1, "Susan" 4}
-   {"Sally" 3, "Bob" 2, "Maurice" 1, "Susan" 4}
-   {"Sally" 3, "Bob" 2, "Maurice" 1, "Susan" 4}
-   {"Sally" 3, "Bob" 2, "Maurice" 1, "Susan" 4}
-   {"Sally" 3, "Bob" 2, "Maurice" 4, "Susan" 1}
-   {"Sally" 3, "Bob" 2, "Maurice" 4, "Susan" 1}
-   {"Sally" 3, "Bob" 2, "Maurice" 4, "Susan" 1}
-   {"Sally" 3, "Bob" 2, "Maurice" 4, "Susan" 1}
-   {"Sally" 2, "Bob" 1, "Maurice" 4, "Susan" 3}
-   {"Sally" 2, "Bob" 1, "Maurice" 4, "Susan" 3}
-   {"Sally" 2, "Bob" 1, "Maurice" 4, "Susan" 3}
-   {"Sally" 1, "Bob" 2, "Maurice" 4, "Susan" 3}
-   {"Sally" 1, "Bob" 2, "Maurice" 4, "Susan" 3}])
-
+  (:use [clojure.pprint :only [pprint]])
+  (:require [ranked-choice.test-data :as test-data]))
 
 
 (defn candidate-sequences [ballots]
@@ -70,5 +45,8 @@
     (if-let [winner (winning-candidate candidate-seqs)]
       winner
       (recur (next-round candidate-seqs)))))
+
+(defn demo []
+  (vote test-data/majority-in-third-round true))
 
 
