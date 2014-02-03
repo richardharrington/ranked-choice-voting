@@ -27,8 +27,6 @@
    {"Sally" 1, "Bob" 2, "Maurice" 4, "Susan" 3}])
 
 
-; initial ballots consist of a sequence
-; of vectors of maps of names (strings) to preference numbers (integers).
 
 (defn candidate-sequences [ballots]
   (map (fn [ballot]
