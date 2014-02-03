@@ -65,9 +65,10 @@
   (let [loser (key (lowest-freq candidate-seqs))]
     (map #(remove #{loser} %) candidate-seqs)))
 
-(defn vote [ballots]
+(defn vote [ballots & [verbose?]]
   (loop [candidate-seqs (candidate-sequences ballots)]
-    (pprint (sort-by first candidate-seqs))
+    (when verbose?
+      (pprint (sort-by first candidate-seqs)))
     (if-let [winner (winning-candidate candidate-seqs)]
       winner
       (recur (next-round candidate-seqs)))))
