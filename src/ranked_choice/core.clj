@@ -10,13 +10,25 @@
 (defn candidate-frequencies [candidate-seqs]
   (frequencies (map first candidate-seqs)))
 
-(defn low-scorer [candidate-seqs]
-  "if there's a tie, pick a random one from among the ties"
-  (let [candidate-freqs (candidate-frequencies candidate-seqs)
-        low-score (apply min (vals candidate-freqs))
-        low-freqs (filter #(#{low-score} (val %))
-                          candidate-freqs)]
-    (key (rand-nth low-freqs))))
+(defn lowest-scoring-candidate [candidate-seqs]
+  "if there's a tie, recursively pick from among the losers
+  the one who would score the lowest in the next round. If they
+  tie all the way back to the last choice on the ballot, pick one at random."
+  (loop [candidate-seqs candidate-seqs
+         candidates-to-check (set (first candidate-seqs))]
+    (let [candidate-freqs (candidate-frequencies candidate-seqs)
+          freqs-to-check (filter #(get candidates-to-check (key %))
+                                 candidate-freqs)
+          low-score (apply min (vals freqs-to-check))
+          low-scorers (keys (filter #(#{low-score} (val %))
+                                    freqs-to-check))]
+      (cond
+        (= (count low-scorers) 1)
+          (first low-scorers)
+        (= (count (first candidate-seqs)) 1)
+          (rand-nth low-scorers)
+        :otherwise
+          (recur (map next candidate-seqs) (set low-scorers))))))
 
 (defn winning-candidate [candidate-seqs]
   (let [majority-threshold (/ (count candidate-seqs) 2)
@@ -26,7 +38,7 @@
       winner)))
 
 (defn next-round [candidate-seqs]
-  (let [loser (low-scorer candidate-seqs)]
+  (let [loser (lowest-scoring-candidate candidate-seqs)]
     (map #(remove #{loser} %) candidate-seqs)))
 
 (defn vote [ballots & [verbose?]]
