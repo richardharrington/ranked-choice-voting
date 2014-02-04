@@ -67,4 +67,4 @@
       (recur (next-round candidate-seqs)))))
 
 (defn demo []
-  (vote test-data/majority-in-third-round-complete-ballots true))
+  (vote test-data/regular-ballots-no-tie true))
