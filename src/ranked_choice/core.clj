@@ -16,11 +16,13 @@
   (distinct (apply concat candidate-seqs)))
 
 (defn candidate-frequencies
-  ([candidate-seqs] (candidate-frequencies candidate-seqs
-                                           (candidate-names candidate-seqs)))
-  ([candidate-seqs  candidates-to-check]
-    (let [defaults (zipmap candidates-to-check (repeat 0))]
-      (into defaults (frequencies (map first candidate-seqs))))))
+  ([candidate-seqs]
+    (let [all-names (candidate-names candidate-seqs)]
+      (candidate-frequencies candidate-seqs all-names)))
+  ([candidate-seqs names]
+    (let [default-freqs (zipmap names (repeat 0))
+          calculated-freqs (frequencies (map first candidate-seqs))]
+      (into default-freqs calculated-freqs))))
 
 (defn losing-candidates [candidate-freqs]
   (let [low-score (apply min (vals candidate-freqs))]
@@ -35,8 +37,9 @@
   pick a loser at random."
   (loop [candidate-seqs candidate-seqs
          candidates-to-check (candidate-names candidate-seqs)]
-    (let [candidate-freqs (candidate-frequencies candidate-seqs candidates-to-check)
-          low-scorers (losing-candidates candidate-freqs)]
+    (let [freqs (candidate-frequencies candidate-seqs candidates-to-check)
+          freqs-to-check (select-keys freqs candidates-to-check)
+          low-scorers (losing-candidates freqs-to-check)]
       (cond
         (= (count low-scorers) 1) (first low-scorers)
         (empty? candidate-seqs) (rand-nth low-scorers)
@@ -45,7 +48,6 @@
 
 (defn winning-candidate [candidate-seqs]
   (let [majority-threshold (/ (count candidate-seqs) 2)
-        candidates-to-check (candidate-names candidate-seqs)
         candidate-freqs (candidate-frequencies candidate-seqs)
         [winner high-score] (apply max-key val candidate-freqs)]
     (when (> high-score majority-threshold)
@@ -59,8 +61,16 @@
 (defn vote [ballots & [verbose?]]
   (loop [candidate-seqs (candidate-sequences ballots)]
     (when verbose?
+      (println "candidate sequences:")
       (pprint (sort-by first candidate-seqs))
+      (println "candidate frequencies:")
       (pprint (reverse (sort-by val (candidate-frequencies candidate-seqs))))
+      (println "winner:")
+      (pprint (winning-candidate candidate-seqs))
+      (println "losers:")
+      (pprint (losing-candidates (candidate-frequencies candidate-seqs)))
+      (println "loser:")
+      (pprint (losing-candidate candidate-seqs))
       (println))
     (if-let [winner (winning-candidate candidate-seqs)]
       winner
