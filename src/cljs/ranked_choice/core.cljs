@@ -7,15 +7,10 @@
 (defn by-id [id]
   (. js/document (getElementById id)))
 
-
-
 (defn main-page []
   [:div
    [:h1 "Welcome to the Instant Runoff Voterator!"]
    [:p "Make your selections below:"]])
-
-
-
 
 (defn mount [component element]
   (reagent/render-component [component]

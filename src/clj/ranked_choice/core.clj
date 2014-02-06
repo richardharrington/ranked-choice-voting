@@ -11,7 +11,7 @@
 (defroutes app-routes
   ; to serve document root address
   (GET "/" []
-       (response/resource-response "index.html"))
+    (response/resource-response "index.html" {:root "public"}))
   ; to serve static pages saved in resources/public directory
   (route/resources "/")
   ; if pages is not found
