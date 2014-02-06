@@ -5,6 +5,7 @@
 /repl
 /resources/public/js
 /resources/public/out
+/src/clj/ranked_choice/data.clj
 pom.xml
 pom.xml.asc
 *.jar
