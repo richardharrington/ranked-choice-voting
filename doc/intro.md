@@ -1,3 +1,3 @@
-# Introduction to ranked_choice
+# Introduction to ranked-choice-voting
 
 TODO: write [great documentation](http://jacobian.org/writing/great-documentation/what-to-write/)
