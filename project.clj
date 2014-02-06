@@ -24,4 +24,8 @@
                 :output-dir "resources/public/out"
                 :optimizations :none
                 :source-map true
-                :pretty-print true}}]})
+                :pretty-print true}}]}
+
+  ; so people can try out the main algorithm for themselves:
+
+  :repl-options {:init-ns ranked-choice.vote})

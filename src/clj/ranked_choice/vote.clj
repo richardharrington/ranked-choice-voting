@@ -1,4 +1,4 @@
-(ns ranked-choice.core
+(ns ranked-choice.vote
   (:use [clojure.pprint :only [pprint]])
   (:require [ranked-choice.test-data :as test-data]))
 
