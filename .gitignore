@@ -3,6 +3,7 @@
 /checkouts
 /out
 /repl
+/.repl
 /resources/public/js
 /resources/public/out
 /src/clj/ranked_choice/data.clj
