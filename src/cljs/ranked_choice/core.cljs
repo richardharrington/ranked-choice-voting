@@ -22,7 +22,7 @@
   (index-by #(do
                (when (= key :rank)
                (= (get % key) value))
-            coll))
+            coll)))
 
 (defn by-id [id]
   (. js/document (getElementById id)))
@@ -33,64 +33,102 @@
 (def app-state
   (atom
     {:winner default-winner
-     :choices [{:name "puppies" :rank nil}
-               {:name "rainbows" :rank nil}
-               {:name "ice cream" :rank nil}
-               {:name "waterfalls" :rank nil}]}))
+     :choices [{:key 0
+                :ballot [{:key 0 :ballot-idx 0 :name "puppies" :rank nil}
+                         {:key 1 :ballot-idx 0 :name "rainbows" :rank nil}
+                         {:key 2 :ballot-idx 0 :name "ice cream" :rank nil}
+                         {:key 3 :ballot-idx 0 :name "waterfalls" :rank nil}]}
+
+               {:key 1
+                :ballot [{:key 0 :ballot-idx 1 :name "puppies" :rank nil}
+                         {:key 1 :ballot-idx 1 :name "rainbows" :rank nil}
+                         {:key 2 :ballot-idx 1 :name "ice cream" :rank nil}
+                         {:key 3 :ballot-idx 1 :name "waterfalls" :rank nil}]}
+
+               {:key 2
+                :ballot [{:key 0 :ballot-idx 2 :name "puppies" :rank nil}
+                         {:key 1 :ballot-idx 2 :name "rainbows" :rank nil}
+                         {:key 2 :ballot-idx 2 :name "ice cream" :rank nil}
+                         {:key 3 :ballot-idx 2 :name "waterfalls" :rank nil}]}
+
+               {:key 3
+                :ballot [{:key 0 :ballot-idx 3 :name "puppies" :rank nil}
+                         {:key 1 :ballot-idx 3 :name "rainbows" :rank nil}
+                         {:key 2 :ballot-idx 3 :name "ice cream" :rank nil}
+                         {:key 3 :ballot-idx 3 :name "waterfalls" :rank nil}]}
+
+               {:key 5
+                :ballot [{:key 0 :ballot-idx 4 :name "puppies" :rank nil}
+                         {:key 1 :ballot-idx 4 :name "rainbows" :rank nil}
+                         {:key 2 :ballot-idx 4 :name "ice cream" :rank nil}
+                         {:key 3 :ballot-idx 4 :name "waterfalls" :rank nil}]}]}))
 
 (defn deref-choices []
   (:choices @app-state))
 
-(defn index-by-name [name]
-  (index-by-key-value :name (deref-choices) name))
+(defn deref-ballot [idx]
+  (:ballot (nth (deref-choices) idx)))
 
-(defn index-by-rank [rank]
-  (index-by-key-value :rank (deref-choices) rank))
+(defn index-by-name [ballot-idx name]
+  (index-by-key-value :name (deref-ballot ballot-idx) name))
 
-(defn next-rank []
-  (first-nonconsecutive (remove nil? (map :rank (deref-choices)))))
+(defn index-by-rank [ballot-idx rank]
+  (index-by-key-value :rank (deref-ballot ballot-idx) rank))
 
-(defn lowest-rank []
-  (apply min (remove nil? (map :rank (deref-choices)))))
+(defn next-rank [ballot-idx]
+  (first-nonconsecutive (remove nil? (map :rank (deref-ballot ballot-idx)))))
 
-(defn update-winner! []
-  (let [winning-rank (lowest-rank)
-        winner (if winning-rank
-                 (:name (nth (deref-choices) (index-by-rank winning-rank)))
-                 default-winner)]
-    (swap! app-state assoc :winner winner)))
+; (defn lowest-rank []
+;   (apply min (remove nil? (map :rank (deref-choices)))))
+
+; (defn update-winner! []
+;   (let [winning-rank (lowest-rank)
+;         winner (if winning-rank
+;                  (:name (nth (deref-choices) (index-by-rank winning-rank)))
+;                  default-winner)]
+;     (swap! app-state assoc :winner winner)))
 
 
 (defn update-choices! [f & args]
   (apply swap! app-state update-in [:choices] f args))
 
-(defn update-choice! [f name & args]
-  (let [idx (index-by-name name)]
-    (update-choices! (fn [choices & args]
-                       (update-in choices [idx] f args))
-                     (cons name args))))
+(defn update-ballot! [f ballot-idx & args]
+  (update-choices! (fn [choices & args]
+                     (update-in choices [ballot-idx :ballot] f args))
+                   args))
 
-(defn add-rank! [name rank]
+(defn update-choice! [f ballot-idx name & args]
+  (let [choice-idx (index-by-name ballot-idx name)]
+    (update-ballot! (fn [ballot & args]
+                      (update-in ballot [choice-idx] f args))
+                    (cons name args))))
+
+
+(defn add-rank! [ballot-idx name rank]
   (update-choice! (fn [choice name]
                     {:name (:name choice) :rank rank})
+                  ballot-idx
                   name
                   rank))
 
-(defn remove-rank! [name]
+(defn remove-rank! [ballot-idx name]
   (update-choice! (fn [choice name]
                     {:name (:name choice) :rank nil})
+                  ballot-idx
                   name))
 
-(defn toggle-rank! [name]
-  (let [choices (deref-choices)]
-    (if (:rank (nth choices (index-by-name name)))
-      (remove-rank! name)
-      (add-rank! name (next-rank)))
-    (update-winner!)))
+(defn toggle-rank! [ballot-idx name]
+  (let [ballot (deref-ballot ballot-idx)]
+    (if (:rank (nth ballot (index-by-name ballot-idx name)))
+      (remove-rank! ballot-idx name)
+      (add-rank! ballot-idx name (next-rank)))
+    ; (update-winner!)
+
+    ))
 
 
 (defn choice-component [choice]
-  [:li {:on-click #(toggle-rank! (:name choice))
+  [:li {:on-click #(toggle-rank! (:ballot-idx choice) (:name choice))
         :style {:cursor "pointer"}}
    (str (:name choice) " " (:rank choice))])
 
@@ -99,7 +137,7 @@
    [:p "Current leader: " [:span (:winner @app-state)]]
    [:p "Make your selections below:"]
    [:ul
-    (for [choice (deref-choices)]
+    (for [choice (deref-ballot 0)]
       [choice-component choice])]])
 
 
