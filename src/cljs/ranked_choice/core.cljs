@@ -18,7 +18,15 @@
                         coll)))
 
 (defn index-by-key-value [key coll value]
-  (index-by #(= (key %) value) coll))
+  (index-by #(do
+               (when (= key :rank)
+                 (log %)
+                 (log key)
+                 (log (key %))
+                 (log (get % key))
+                 (log value))
+               (= (get % key) value))
+            coll))
 
 (defn by-id [id]
   (. js/document (getElementById id)))
@@ -28,7 +36,8 @@
 
 (def app-state
   (atom
-    {:choices [{:name "puppies" :rank nil}
+    {:winner ""
+     :choices [{:name "puppies" :rank nil}
                {:name "rainbows" :rank nil}
                {:name "ice cream" :rank nil}
                {:name "waterfalls" :rank nil}]}))
@@ -44,6 +53,14 @@
 
 (defn next-rank []
   (first-nonconsecutive (remove nil? (map :rank (deref-choices)))))
+
+(defn lowest-rank []
+  (apply min (remove nil? (map :rank (deref-choices)))))
+
+(defn update-winner! []
+  (let [winner (:name (nth (deref-choices)
+                           (index-by-rank (lowest-rank))))]
+    (swap! app-state assoc :winner winner)))
 
 (defn update-choices! [f & args]
   (apply swap! app-state update-in [:choices] f args))
@@ -67,12 +84,11 @@
 
 (defn toggle-rank! [name]
   (let [choices (deref-choices)]
-    (log (index-by-name name))
-    (log (nth choices (index-by-name name)))
-    (log (:rank (nth choices (index-by-name name))))
     (if (:rank (nth choices (index-by-name name)))
       (remove-rank! name)
-      (add-rank! name (next-rank)))))
+      (add-rank! name (next-rank)))
+    (update-winner!)))
+
 
 (defn choice-component [choice]
   [:li {:on-click #(toggle-rank! (:name choice))
@@ -81,7 +97,7 @@
 
 (defn choice-list-component []
   [:div
-   [:p "Current leader: " [:span "Placeholder"]]
+   [:p "Current leader: " [:span (:winner @app-state)]]
    [:p "Make your selections below:"]
    [:ul
     (for [choice (deref-choices)]
