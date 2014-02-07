@@ -5,10 +5,20 @@
             [cljs.core.async :refer [put! chan <!]]))
 
 
-(defn index-of [pred coll]
+(defn first-nonconsecutive [coll-of-numbers]
+  (loop [n 1
+         ordered (sort coll-of-numbers)]
+    (if (not= (first ordered) n)
+      n
+      (recur (inc n) (rest ordered)))))
+
+(defn index-by [pred coll]
   (first (keep-indexed (fn [idx item]
                          (when (pred item) idx))
                         coll)))
+
+(defn index-by-key-value [key coll value]
+  (index-by #(= (key %) value) coll))
 
 (defn by-id [id]
   (. js/document (getElementById id)))
@@ -18,68 +28,61 @@
 
 (def app-state
   (atom
-    {:winner ""
-     :choices [["puppies" nil]
-               ["rainbows" nil]
-               ["ice cream" nil]
-               ["waterfalls" nil]]}))
+    {:choices [{:name "puppies" :rank nil}
+               {:name "rainbows" :rank nil}
+               {:name "ice cream" :rank nil}
+               {:name "waterfalls" :rank nil}]}))
 
 (defn deref-choices []
   (:choices @app-state))
 
-(defn index-of-name [name]
-  (index-of #(#{name} (first %))
-            (deref-choices)))
+(def index-by-name
+  (partial index-by-key-value :name (deref-choices)))
 
-(defn index-of-rank [rank]
-  (index-of #(#{rank} (second %))
-            (deref-choices)))
-
-(defn first-nonconsecutive [coll-of-numbers]
-  (loop [n 1
-         ordered (sort coll-of-numbers)]
-    (if (not= (first ordered) n)
-      n
-      (recur (inc n) (rest ordered)))))
+(def index-by-rank
+  (partial index-by-key-value :rank (deref-choices)))
 
 (defn next-rank []
-  (first-nonconsecutive (remove nil? (map second (deref-choices)))))
+  (first-nonconsecutive (remove nil? (map :rank (deref-choices)))))
 
 (defn update-choices! [f & args]
   (apply swap! app-state update-in [:choices] f args))
 
 (defn update-choice! [f name & args]
-  (let [idx (index-of-name name)]
+  (let [idx (index-by-name name)]
     (update-choices! (fn [choices & args]
                        (update-in choices [idx] f args))
                      (cons name args))))
 
 (defn add-rank! [name rank]
   (update-choice! (fn [choice name]
-                    [(first choice) rank])
+                    {:name (:name choice) :rank rank})
                   name
                   rank))
 
 (defn remove-rank! [name]
   (update-choice! (fn [choice name]
-                    [(first choice) nil])
+                    {:name (:name choice) :rank nil})
                   name))
 
 (defn toggle-rank! [name]
   (let [choices (deref-choices)]
-    (if (second (nth choices (index-of-name name)))
+    (log (index-by-name name))
+    (log (nth choices (index-by-name name)))
+    (log (:rank (nth choices (index-by-name name))))
+    (if (:rank (nth choices (index-by-name name)))
       (remove-rank! name)
       (add-rank! name (next-rank)))))
 
 (defn choice-list-component []
   [:div
-   [:p "Current leader: " [:span (:winner @app-state)]]
+   [:p "Current leader: " [:span "Placeholder"]]
    [:p "Make your selections below:"]
    [:ul
     (for [choice (deref-choices)]
-      [:li {:on-click #(toggle-rank! (first choice))
+      [:li {:on-click #(toggle-rank! (:name choice))
             :style {:cursor "pointer"}}
-       (str (first choice) " " (second choice))])]])
+       (str (:name choice) " " (:rank choice))])]])
 
 
 (defn main-page []
