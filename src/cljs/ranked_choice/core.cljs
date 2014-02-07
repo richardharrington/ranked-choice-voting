@@ -74,15 +74,18 @@
       (remove-rank! name)
       (add-rank! name (next-rank)))))
 
+(defn choice-component [choice]
+  [:li {:on-click #(toggle-rank! (:name choice))
+        :style {:cursor "pointer"}}
+   (str (:name choice) " " (:rank choice))])
+
 (defn choice-list-component []
   [:div
    [:p "Current leader: " [:span "Placeholder"]]
    [:p "Make your selections below:"]
    [:ul
     (for [choice (deref-choices)]
-      [:li {:on-click #(toggle-rank! (:name choice))
-            :style {:cursor "pointer"}}
-       (str (:name choice) " " (:rank choice))])]])
+      [choice-component choice])]])
 
 
 (defn main-page []
