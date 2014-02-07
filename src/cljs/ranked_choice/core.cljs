@@ -18,11 +18,9 @@
                          (when (pred item) idx))
                         coll)))
 
-(defn index-by-key-value [key coll value]
-  (index-by #(do
-               (when (= key :rank)
-               (= (get % key) value))
-            coll)))
+(defn index-by-key-value [k coll value]
+  (index-by #(= (k %) value)
+            coll))
 
 (defn by-id [id]
   (. js/document (getElementById id)))
@@ -57,7 +55,7 @@
                          {:key 2 :ballot-idx 3 :name "ice cream" :rank nil}
                          {:key 3 :ballot-idx 3 :name "waterfalls" :rank nil}]}
 
-               {:key 5
+               {:key 4
                 :ballot [{:key 0 :ballot-idx 4 :name "puppies" :rank nil}
                          {:key 1 :ballot-idx 4 :name "rainbows" :rank nil}
                          {:key 2 :ballot-idx 4 :name "ice cream" :rank nil}
@@ -99,9 +97,11 @@
 
 (defn update-choice! [f ballot-idx name & args]
   (let [choice-idx (index-by-name ballot-idx name)]
-    (update-ballot! (fn [ballot & args]
-                      (update-in ballot [choice-idx] f args))
-                    (cons name args))))
+    (apply update-ballot! (fn [ballot & args]
+                              (update-in ballot [choice-idx] f args))
+                          ballot-idx
+                          name
+                          args)))
 
 
 (defn add-rank! [ballot-idx name rank]
@@ -121,7 +121,8 @@
   (let [ballot (deref-ballot ballot-idx)]
     (if (:rank (nth ballot (index-by-name ballot-idx name)))
       (remove-rank! ballot-idx name)
-      (add-rank! ballot-idx name (next-rank)))
+      (do (add-rank! ballot-idx name (next-rank ballot-idx))
+        (log "hi")))
     ; (update-winner!)
 
     ))
