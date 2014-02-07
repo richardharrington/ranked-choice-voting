@@ -4,6 +4,7 @@
             [clojure.string :as string]
             [cljs.core.async :refer [put! chan <!]]))
 
+(def default-winner "None. Vote already!")
 
 (defn first-nonconsecutive [coll-of-numbers]
   (loop [n 1
@@ -20,11 +21,6 @@
 (defn index-by-key-value [key coll value]
   (index-by #(do
                (when (= key :rank)
-                 (log %)
-                 (log key)
-                 (log (key %))
-                 (log (get % key))
-                 (log value))
                (= (get % key) value))
             coll))
 
@@ -36,7 +32,7 @@
 
 (def app-state
   (atom
-    {:winner ""
+    {:winner default-winner
      :choices [{:name "puppies" :rank nil}
                {:name "rainbows" :rank nil}
                {:name "ice cream" :rank nil}
@@ -45,11 +41,11 @@
 (defn deref-choices []
   (:choices @app-state))
 
-(def index-by-name
-  (partial index-by-key-value :name (deref-choices)))
+(defn index-by-name [name]
+  (index-by-key-value :name (deref-choices) name))
 
-(def index-by-rank
-  (partial index-by-key-value :rank (deref-choices)))
+(defn index-by-rank [rank]
+  (index-by-key-value :rank (deref-choices) rank))
 
 (defn next-rank []
   (first-nonconsecutive (remove nil? (map :rank (deref-choices)))))
@@ -58,9 +54,12 @@
   (apply min (remove nil? (map :rank (deref-choices)))))
 
 (defn update-winner! []
-  (let [winner (:name (nth (deref-choices)
-                           (index-by-rank (lowest-rank))))]
+  (let [winning-rank (lowest-rank)
+        winner (if winning-rank
+                 (:name (nth (deref-choices) (index-by-rank winning-rank)))
+                 default-winner)]
     (swap! app-state assoc :winner winner)))
+
 
 (defn update-choices! [f & args]
   (apply swap! app-state update-in [:choices] f args))
