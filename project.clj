@@ -17,6 +17,7 @@
   :source-paths ["src/clj", "src/cljs"]
 
   :cljsbuild {
+    :repl-listen-port 9001
     :builds [{:id "ranked-choice"
               :source-paths ["src/cljs"]
               :compiler {
