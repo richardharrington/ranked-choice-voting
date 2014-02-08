@@ -5,93 +5,95 @@
             [clojure.string :as string]
             [cljs.core.async :refer [put! chan <!]]))
 
+; TODO: Put this data in some other file. Probably
+; have it in the other format, to be transferred into the
+; appropriate format to be used by this file.
+
 (def regular-ballots
-
-
-[{:key 0,
-  :ballot
-  [{:key 0, :ballot-idx 0, :name "ice cream", :rank 4}
-   {:key 1, :ballot-idx 0, :name "puppies", :rank 3}
-   {:key 2, :ballot-idx 0, :name "video games", :rank 1}
-   {:key 3, :ballot-idx 0, :name "rainbows", :rank 2}]}
- {:key 1,
-  :ballot
-  [{:key 0, :ballot-idx 1, :name "ice cream", :rank 4}
-   {:key 1, :ballot-idx 1, :name "puppies", :rank 3}
-   {:key 2, :ballot-idx 1, :name "video games", :rank 1}
-   {:key 3, :ballot-idx 1, :name "rainbows", :rank 2}]}
- {:key 2,
-  :ballot
-  [{:key 0, :ballot-idx 2, :name "ice cream", :rank 4}
-   {:key 1, :ballot-idx 2, :name "puppies", :rank 3}
-   {:key 2, :ballot-idx 2, :name "video games", :rank 1}
-   {:key 3, :ballot-idx 2, :name "rainbows", :rank 2}]}
- {:key 3,
-  :ballot
-  [{:key 0, :ballot-idx 3, :name "ice cream", :rank 4}
-   {:key 1, :ballot-idx 3, :name "puppies", :rank 3}
-   {:key 2, :ballot-idx 3, :name "video games", :rank 1}
-   {:key 3, :ballot-idx 3, :name "rainbows", :rank 2}]}
- {:key 4,
-  :ballot
-  [{:key 0, :ballot-idx 4, :name "ice cream", :rank 4}
-   {:key 1, :ballot-idx 4, :name "puppies", :rank 3}
-   {:key 2, :ballot-idx 4, :name "video games", :rank 1}
-   {:key 3, :ballot-idx 4, :name "rainbows", :rank 2}]}
- {:key 5,
-  :ballot
-  [{:key 0, :ballot-idx 5, :name "ice cream", :rank 3}
-   {:key 1, :ballot-idx 5, :name "puppies", :rank 2}
-   {:key 2, :ballot-idx 5, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 5, :name "rainbows", :rank 1}]}
- {:key 6,
-  :ballot
-  [{:key 0, :ballot-idx 6, :name "ice cream", :rank 3}
-   {:key 1, :ballot-idx 6, :name "puppies", :rank 2}
-   {:key 2, :ballot-idx 6, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 6, :name "rainbows", :rank 1}]}
- {:key 7,
-  :ballot
-  [{:key 0, :ballot-idx 7, :name "ice cream", :rank 3}
-   {:key 1, :ballot-idx 7, :name "puppies", :rank 2}
-   {:key 2, :ballot-idx 7, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 7, :name "rainbows", :rank 1}]}
- {:key 8,
-  :ballot
-  [{:key 0, :ballot-idx 8, :name "ice cream", :rank 3}
-   {:key 1, :ballot-idx 8, :name "puppies", :rank 2}
-   {:key 2, :ballot-idx 8, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 8, :name "rainbows", :rank 1}]}
- {:key 9,
-  :ballot
-  [{:key 0, :ballot-idx 9, :name "ice cream", :rank 2}
-   {:key 1, :ballot-idx 9, :name "puppies", :rank 1}
-   {:key 2, :ballot-idx 9, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 9, :name "rainbows", :rank 3}]}
- {:key 10,
-  :ballot
-  [{:key 0, :ballot-idx 10, :name "ice cream", :rank 2}
-   {:key 1, :ballot-idx 10, :name "puppies", :rank 1}
-   {:key 2, :ballot-idx 10, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 10, :name "rainbows", :rank 3}]}
- {:key 11,
-  :ballot
-  [{:key 0, :ballot-idx 11, :name "ice cream", :rank 2}
-   {:key 1, :ballot-idx 11, :name "puppies", :rank 1}
-   {:key 2, :ballot-idx 11, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 11, :name "rainbows", :rank 3}]}
- {:key 12,
-  :ballot
-  [{:key 0, :ballot-idx 12, :name "ice cream", :rank 1}
-   {:key 1, :ballot-idx 12, :name "puppies", :rank 2}
-   {:key 2, :ballot-idx 12, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 12, :name "rainbows", :rank 3}]}
- {:key 13,
-  :ballot
-  [{:key 0, :ballot-idx 13, :name "ice cream", :rank 1}
-   {:key 1, :ballot-idx 13, :name "puppies", :rank 2}
-   {:key 2, :ballot-idx 13, :name "video games", :rank 4}
-   {:key 3, :ballot-idx 13, :name "rainbows", :rank 3}]}])
+  [{:key 0,
+    :ballot
+    [{:key 0, :ballot-idx 0, :name "ice cream", :rank 4}
+     {:key 1, :ballot-idx 0, :name "puppies", :rank 3}
+     {:key 2, :ballot-idx 0, :name "video games", :rank 1}
+     {:key 3, :ballot-idx 0, :name "rainbows", :rank 2}]}
+   {:key 1,
+    :ballot
+    [{:key 0, :ballot-idx 1, :name "ice cream", :rank 4}
+     {:key 1, :ballot-idx 1, :name "puppies", :rank 3}
+     {:key 2, :ballot-idx 1, :name "video games", :rank 1}
+     {:key 3, :ballot-idx 1, :name "rainbows", :rank 2}]}
+   {:key 2,
+    :ballot
+    [{:key 0, :ballot-idx 2, :name "ice cream", :rank 4}
+     {:key 1, :ballot-idx 2, :name "puppies", :rank 3}
+     {:key 2, :ballot-idx 2, :name "video games", :rank 1}
+     {:key 3, :ballot-idx 2, :name "rainbows", :rank 2}]}
+   {:key 3,
+    :ballot
+    [{:key 0, :ballot-idx 3, :name "ice cream", :rank 4}
+     {:key 1, :ballot-idx 3, :name "puppies", :rank 3}
+     {:key 2, :ballot-idx 3, :name "video games", :rank 1}
+     {:key 3, :ballot-idx 3, :name "rainbows", :rank 2}]}
+   {:key 4,
+    :ballot
+    [{:key 0, :ballot-idx 4, :name "ice cream", :rank 4}
+     {:key 1, :ballot-idx 4, :name "puppies", :rank 3}
+     {:key 2, :ballot-idx 4, :name "video games", :rank 1}
+     {:key 3, :ballot-idx 4, :name "rainbows", :rank 2}]}
+   {:key 5,
+    :ballot
+    [{:key 0, :ballot-idx 5, :name "ice cream", :rank 3}
+     {:key 1, :ballot-idx 5, :name "puppies", :rank 2}
+     {:key 2, :ballot-idx 5, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 5, :name "rainbows", :rank 1}]}
+   {:key 6,
+    :ballot
+    [{:key 0, :ballot-idx 6, :name "ice cream", :rank 3}
+     {:key 1, :ballot-idx 6, :name "puppies", :rank 2}
+     {:key 2, :ballot-idx 6, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 6, :name "rainbows", :rank 1}]}
+   {:key 7,
+    :ballot
+    [{:key 0, :ballot-idx 7, :name "ice cream", :rank 3}
+     {:key 1, :ballot-idx 7, :name "puppies", :rank 2}
+     {:key 2, :ballot-idx 7, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 7, :name "rainbows", :rank 1}]}
+   {:key 8,
+    :ballot
+    [{:key 0, :ballot-idx 8, :name "ice cream", :rank 3}
+     {:key 1, :ballot-idx 8, :name "puppies", :rank 2}
+     {:key 2, :ballot-idx 8, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 8, :name "rainbows", :rank 1}]}
+   {:key 9,
+    :ballot
+    [{:key 0, :ballot-idx 9, :name "ice cream", :rank 2}
+     {:key 1, :ballot-idx 9, :name "puppies", :rank 1}
+     {:key 2, :ballot-idx 9, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 9, :name "rainbows", :rank 3}]}
+   {:key 10,
+    :ballot
+    [{:key 0, :ballot-idx 10, :name "ice cream", :rank 2}
+     {:key 1, :ballot-idx 10, :name "puppies", :rank 1}
+     {:key 2, :ballot-idx 10, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 10, :name "rainbows", :rank 3}]}
+   {:key 11,
+    :ballot
+    [{:key 0, :ballot-idx 11, :name "ice cream", :rank 2}
+     {:key 1, :ballot-idx 11, :name "puppies", :rank 1}
+     {:key 2, :ballot-idx 11, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 11, :name "rainbows", :rank 3}]}
+   {:key 12,
+    :ballot
+    [{:key 0, :ballot-idx 12, :name "ice cream", :rank 1}
+     {:key 1, :ballot-idx 12, :name "puppies", :rank 2}
+     {:key 2, :ballot-idx 12, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 12, :name "rainbows", :rank 3}]}
+   {:key 13,
+    :ballot
+    [{:key 0, :ballot-idx 13, :name "ice cream", :rank 1}
+     {:key 1, :ballot-idx 13, :name "puppies", :rank 2}
+     {:key 2, :ballot-idx 13, :name "video games", :rank 4}
+     {:key 3, :ballot-idx 13, :name "rainbows", :rank 3}]}])
 
 (defn process-ballots [ballots]
   (vec (map (fn [ballot]
@@ -103,7 +105,9 @@
 
 
 
-
+; TODO: reinstate this to take convert ballot info in the format from
+; ranked-choice.vote into ballot info suitable for the views
+; in these components. (Note the generation of the keys.)
 
 ; (defn process-ballots [ballots]
 ;   (vec (map-indexed (fn [ballot-idx ballot]
@@ -117,6 +121,11 @@
 ;                                          ballot))})
 ;                     ballots)))
 
+; TODO: Reinstate this default winner thing. Investigate the
+; issue where the winner is not displayed properly if there's
+; only one vote. Possibly nothing else to compare it to?
+; It also doesn't deal well with the edge case of zero votes.
+
 (def default-winner "None. Vote already!")
 
 (defn first-nonconsecutive [coll-of-numbers]
@@ -125,6 +134,9 @@
     (if (not= (first ordered) n)
       n
       (recur (inc n) (rest ordered)))))
+
+; TODO: Look into indexing by React keys throughout this file,
+; instead of indexing by array index values.
 
 (defn index-by [pred coll]
   (first (keep-indexed (fn [idx item]
@@ -141,38 +153,20 @@
 (defn log [msg]
   (. js/console (log msg)))
 
+; TODO: rename "choices" to something else. It's a list
+; of ballots now. A list of lists of choices, so to speak.
+; Probably it should be called "ballots".
+
+; TODO: General note. Do we really have to have all these data
+; structures that contain pathways to themselves from the top
+; of bigger data structures? I'm speaking mostly of things like choice-component,
+; which have local indexes and ballot indexes and such. It's the same
+; problem I had with robotwar. I must speak to John Barker about it.
+
 (def app-state
   (atom
     {:winner default-winner
-     :choices [{:key 0
-                :ballot [{:key 0 :ballot-idx 0 :name "puppies" :rank nil}
-                         {:key 1 :ballot-idx 0 :name "rainbows" :rank nil}
-                         {:key 2 :ballot-idx 0 :name "ice cream" :rank nil}
-                         {:key 3 :ballot-idx 0 :name "waterfalls" :rank nil}]}
-
-               {:key 1
-                :ballot [{:key 0 :ballot-idx 1 :name "puppies" :rank nil}
-                         {:key 1 :ballot-idx 1 :name "rainbows" :rank nil}
-                         {:key 2 :ballot-idx 1 :name "ice cream" :rank nil}
-                         {:key 3 :ballot-idx 1 :name "waterfalls" :rank nil}]}
-
-               {:key 2
-                :ballot [{:key 0 :ballot-idx 2 :name "puppies" :rank nil}
-                         {:key 1 :ballot-idx 2 :name "rainbows" :rank nil}
-                         {:key 2 :ballot-idx 2 :name "ice cream" :rank nil}
-                         {:key 3 :ballot-idx 2 :name "waterfalls" :rank nil}]}
-
-               {:key 3
-                :ballot [{:key 0 :ballot-idx 3 :name "puppies" :rank nil}
-                         {:key 1 :ballot-idx 3 :name "rainbows" :rank nil}
-                         {:key 2 :ballot-idx 3 :name "ice cream" :rank nil}
-                         {:key 3 :ballot-idx 3 :name "waterfalls" :rank nil}]}
-
-               {:key 4
-                :ballot [{:key 0 :ballot-idx 4 :name "puppies" :rank nil}
-                         {:key 1 :ballot-idx 4 :name "rainbows" :rank nil}
-                         {:key 2 :ballot-idx 4 :name "ice cream" :rank nil}
-                         {:key 3 :ballot-idx 4 :name "waterfalls" :rank nil}]}]}))
+     :choices []}))
 
 (defn deref-choices []
   (:choices @app-state))
@@ -188,9 +182,6 @@
 
 (defn next-rank [ballot-idx]
   (first-nonconsecutive (remove nil? (map :rank (deref-ballot ballot-idx)))))
-
-; (defn lowest-rank []
-;   (apply min (remove nil? (map :rank (deref-choices)))))
 
 (defn update-winner! []
   (let [processed-ballots (process-ballots (deref-choices))
@@ -214,7 +205,6 @@
                           name
                           args)))
 
-
 (defn add-rank! [ballot-idx name rank]
   (update-choice! (fn [choice name]
                     (assoc choice :rank rank))
@@ -235,18 +225,17 @@
       (add-rank! ballot-idx name (next-rank ballot-idx)))
     (update-winner!)))
 
+; These ballot-indexes are the same as keys. Get rid of ballot-indexes.
+; Look into the whole "key" thing in React. What's that all about?
 
-(defn choice-component [choice]
-  [:li {:on-click #(let [c choice
-                         bic (:ballot-idx choice)
-                         nc (:name choice)]
-                         (toggle-rank! (:ballot-idx choice) (:name choice)))}
-   [:span.rank (:rank choice)]
-   [:span.name (:name choice)]])
+(defn choice-component [{:keys [ballot-idx name rank]}]
+  [:li {:on-click #(toggle-rank! ballot-idx name)}
+   [:span.rank rank]
+   [:span.name name]])
 
-(defn ballot-component [ballot]
+(defn ballot-component [{ballot :ballot}]
   [:ul.ballot
-   (for [choice (:ballot ballot)]
+   (for [choice ballot]
      [choice-component choice])])
 
 (defn choice-lists-component []
@@ -269,4 +258,8 @@
   (reagent/render-component [component] element))
 
 (mount main-page (by-id "ranked-choice-root"))
+
+; TODO: Have it update the winner here? Really?
+; Look for something more organic.
+
 (update-winner!)
