@@ -1,3 +1,62 @@
 * {
   font-family: 'Merriweather', serif;
 }
+
+.ballot {
+  display: inline-block;
+  font-size: 12px;
+  width: 105px;
+  background-color: #f7f7f7;
+  margin-right: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+ul {
+
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-padding-start: 0;
+}
+
+li {
+  display: block;
+  cursor: pointer;
+  text-align: left;
+  list-style: none;
+  clear: both;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.rank {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 19px;
+  border: 2px #d5d5d5 solid;
+  background-color: white;
+  color: #0a0;
+  margin-right: 5px;
+  text-align: center;
+  float: left;
+  -webkit-user-select: none;
+}
+
+.name {
+  color: #666;
+  float: left;
+  line-height: 23px;
+}
+
+.name:hover{
+  color: #111;
+}
+
+.leader {
+  font-weight: bold;
+  font-size: 20px;
+}
