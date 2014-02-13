@@ -1,9 +1,7 @@
 (ns ranked-choice.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [ranked-choice.vote :as vote]
             [reagent.core :as reagent :refer [atom]]
             [clojure.string :as string]
-            [cljs.core.async :refer [put! chan <!]]))
 
 ; TODO: Put this data in some other file. Probably
 ; have it in the other format, to be transferred into the
