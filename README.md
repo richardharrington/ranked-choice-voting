@@ -10,6 +10,15 @@ An implementation of a [ranked-choice (or instant-runoff)](http://en.wikipedia.o
 
 ## Usage
 
+This is a work in progress at the moment. There are currently two ways to check it out:
+
+First way (will get a website going in which you can click or unclick the votes and see how that affects the winner):
+
+1. `lein cljsbuild once`
+2. `lein ring server`
+
+Second way (will get you a repl and print out some of the progress the algorithm goes through to determine the winner):
+
 1. `lein repl`
 2. `(demo)`
 3. (optional, see the data in test_data.clj) `(vote <name-of-data-set> <verbose?>)`
