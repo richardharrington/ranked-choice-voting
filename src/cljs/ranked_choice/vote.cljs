@@ -4,7 +4,7 @@
   "assumes data is a well-formed vector of
    key-value pairs where each key is the name of a candidate
    and each value is an integer ranking, such that in each vector,
-   all the integer keys together consist of the unique numbers from
+   all the integer values together consist of the unique numbers from
    1 to some number n, with no gaps"
   (map (fn [ballot]
          (map key (sort-by val ballot)))
